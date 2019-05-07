@@ -400,7 +400,7 @@ def run_action(ipaconfig, args, action):
     finally:
         try:
             run_step(ipacontainer, 'cleanup', uid=os.getuid(), gid=os.getgid())
-        except command.ContainerExecError:
+        except command.ContainerExecError as e:
             logger.error("An exception has occured during cleanup: %s", e)
 
         if args.no_cleanup:
