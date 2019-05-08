@@ -31,9 +31,14 @@ def create_container(docker_client, config, logger):
     logger.info(
         "Creating container from %s", image)
 
-    logger.info("Pulling image %s, this may take several minutes.", image)
-    output = docker_client.pull(image)
-    logger.debug(output)
+    try:
+        logger.info("Querying image %s", image)
+        output = docker_client.get(image)
+        logger.debug(output)
+    except docker.errors.ImageNotFound as e:
+        logger.info("Pulling image %s, this may take several minutes.", image)
+        output = docker_client.pull(image)
+        logger.debug(output)
 
     logger.info("Image pulled in successfuly.")
 
